@@ -36,6 +36,7 @@
 }
 @if (Model.Error != null)
 {
+    //Непонятное отображение ошибки для пользователя
     <div class="error">@Model.Error</div>
 }
 <h2>Заказы</h2>
@@ -171,11 +172,10 @@ else
 
 <!-- Скрипт для автоматической отправки формы при изменении даты -->
 <script>
-    // Функция для автоматической отправки формы при изменении даты
     function autoSubmitForm(dateInput) {
-        const form = dateInput.closest('form'); // Находим ближайшую форму
+        const form = dateInput.closest('form');
         if (form) {
-            form.submit(); // Отправляем форму
+            form.submit();
         }
     }
 

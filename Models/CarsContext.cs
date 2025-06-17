@@ -36,7 +36,6 @@ public partial class CarsContext : DbContext
             entity.ToTable(b => b.HasCheckConstraint("check_car_number",
                 "number::text ~* '[А-ЯA-Z]{1}[0-9]{3}[А-ЯA-Z]{2}[0-9]{2,3}'::text"));
 
-            // Настройка столбцов
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Date).HasColumnName("date");
             entity.Property(e => e.Number)

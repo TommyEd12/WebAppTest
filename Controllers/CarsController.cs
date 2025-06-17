@@ -33,19 +33,19 @@ namespace WebAppTest.Controllers
                 error = "Элемент не выбран";
             else
             {
-                Car? e = _context.Cars.Where(e => e.Number == id).FirstOrDefault();
-                if(e == null)
+                Car? car = _context.Cars.Where(car => car.Number == id).FirstOrDefault();
+                if(car == null)
                     error = $"Выбранного элемента не существует";
                 else
                 {
-                    if (newNumber != null) { e.Number = newNumber; }
-                    else if (brand != null) { e.Brand = brand; }
-                    else if (model != null) { e.Model = model; }
-                    else if (color != null) { e.Color = color; }
+                    if (newNumber != null) { car.Number = newNumber; }
+                    else if (brand != null) { car.Brand = brand; }
+                    else if (model != null) { car.Model = model; }
+                    else if (color != null) { car.Color = color; }
 
                     try
                     {
-                        _context.Cars.Update(e);
+                        _context.Cars.Update(car);
                         _context.SaveChanges();
                         
                     }
@@ -89,14 +89,14 @@ namespace WebAppTest.Controllers
                 error = "Элемент не выбран";
             else
             {
-                Car? e = _context.Cars.Where(e => e.Number == id).FirstOrDefault();
-                if (e == null)
+                Car? car = _context.Cars.Where(car => car.Number == id).FirstOrDefault();
+                if (car == null)
                     error = $"Выбранного элемента не существует";
                 else
                 {
                     try
                     {
-                        _context.Cars.Remove(e);
+                        _context.Cars.Remove(car);
                         _context.SaveChanges();
                     }
                     catch (DbUpdateException ex)
@@ -134,13 +134,13 @@ namespace WebAppTest.Controllers
             var items = _context.Cars.AsQueryable(); 
 
             if (searchNumber != null)
-                items = items.Where(car => car.Number.Contains(searchNumber)); // Частичное совпадение для номера
+                items = items.Where(car => car.Number.Contains(searchNumber)); 
             if (searchBrand != null)
-                items = items.Where(car => car.Brand.Contains(searchBrand)); // Частичное совпадение для марки
+                items = items.Where(car => car.Brand.Contains(searchBrand));
             if (searchModel != null)
-                items = items.Where(car => car.Model.Contains(searchModel)); // Частичное совпадение для модели
+                items = items.Where(car => car.Model.Contains(searchModel));
             if (searchColor != null)
-                items = items.Where(car => car.Color.Contains(searchColor)); // Частичное совпадение для цвета
+                items = items.Where(car => car.Color.Contains(searchColor));
 
             return View("Index", new CarsViewModel()
             {
@@ -185,8 +185,8 @@ namespace WebAppTest.Controllers
                 {
                     if (ex.InnerException != null)
                     {
-                        PostgresException e = (PostgresException)ex.InnerException;
-                        if (e.SqlState == "23503")
+                        PostgresException car = (PostgresException)ex.InnerException;
+                        if (car.SqlState == "23503")
                             error = $"Нельзя добавить запись с брендом, " +
                                 $"отсуствующем в таблице Бренды";
                     }

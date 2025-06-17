@@ -4,6 +4,8 @@ using Npgsql;
 using WebAppTest.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
+
+//Http методы должны быть асинхронными
 namespace WebAppTest.Controllers
 {
     public class AccidentsController : Controller
@@ -26,7 +28,7 @@ namespace WebAppTest.Controllers
         [HttpPost]
         public IActionResult Edit(int? id,
     string? number, DateOnly? date, string? login,
-    string? departureaddress, string? destinationaddress, decimal? sum)
+    string? deparartureAddress, string? destinationAddress, decimal? sum)
         {
             string? error = null;
             if (id == null)
@@ -35,31 +37,30 @@ namespace WebAppTest.Controllers
             }
             else
             {
-                Accident? e = _context.Accidents.Where(e => e.Id == id).FirstOrDefault();
-                if (e == null)
+                Accident? accident = _context.Accidents.Where(accident => accident.Id == id).FirstOrDefault();
+                if (accident == null)
                 {
                     error = $"Выбранного элемента не существует";
                 }
                 else
                 {
-                    // Обновляем каждое поле, если оно передано
-                    if (number != null) e.Number = number;
-                    if (date != null) e.Date = (DateOnly)date;
-                    if (login != null) e.Login = login;
-                    if (departureaddress != null) e.Departureaddress = departureaddress;
-                    if (destinationaddress != null) e.Destinationaddress = destinationaddress;
-                    if (sum != null) e.Sum = (decimal)sum;
+                    if (number != null) accident.Number = number;
+                    if (date != null) accident.Date = (DateOnly)date;
+                    if (login != null) accident.Login = login;
+                    if (deparartureAddress != null) accident.Departureaddress = deparartureAddress;
+                    if (destinationAddress != null) accident.Destinationaddress = destinationAddress;
+                    if (sum != null) accident.Sum = (decimal)sum;
 
                     try
                     {
-                        _context.Accidents.Update(e);
+                        _context.Accidents.Update(accident);
                         _context.SaveChanges();
                     }
-                    catch (DbUpdateException ex)
+                    catch (DbUpdateException updateException)
                     {
-                        if (ex.InnerException != null)
+                        if (updateException.InnerException != null)
                         {
-                            PostgresException inner = (PostgresException)ex.InnerException;
+                            PostgresException inner = (PostgresException)updateException.InnerException;
                             if (inner.SqlState == "23503")
                                 error = $"Нельзя добавить запись с номером машины, " +
                                     $"отсуствующем в таблице машины";
@@ -71,12 +72,12 @@ namespace WebAppTest.Controllers
                         else
                         {
                             error = "Произошла непредвиденная ошибка";
-                            Console.WriteLine(ex);
+                            Console.WriteLine(updateException);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception updateException)
                     {
-                        error = $"{ex.Message}";
+                        error = $"{updateException.Message}";
                     }
                 }
             }
@@ -95,20 +96,20 @@ namespace WebAppTest.Controllers
                 error = "Элемент не выбран";
             else
             {
-                Accident? e = _context.Accidents.Where(e => e.Id == id).FirstOrDefault();
-                if (e == null)
+                Accident? accident = _context.Accidents.Where(accident => accident.Id == id).FirstOrDefault();
+                if (accident == null)
                     error = $"Выбранного элемента не существует";
                 else
                 {
                     try
                     {
-                        _context.Accidents.Remove(e);
+                        _context.Accidents.Remove(accident);
                         _context.SaveChanges();
                     }
-                    catch (Exception ex)
+                    catch (Exception deleteException)
                     {
                         error = $"Произошла непредвиденная ошибка";
-                        Console.WriteLine(ex.Message);
+                        Console.WriteLine(deleteException.Message);
                     }
                 }
             }
@@ -121,11 +122,11 @@ namespace WebAppTest.Controllers
 
         [HttpPost]
         public IActionResult Add(string? number, DateOnly? date, string? login,
-            string? departureaddress, string? destinationaddress, decimal? sum)
+            string? deparartureAddress, string? destinationAddress, decimal? sum)
         {
             string? error = null;
             if (number == null || date == null || login == null ||
-                departureaddress == null || destinationaddress == null || sum == null)
+                deparartureAddress == null || destinationAddress == null || sum == null)
                 error = "Не уаказан один из параметров";
             else
             {
@@ -136,31 +137,31 @@ namespace WebAppTest.Controllers
                         Number = number,
                         Date = (DateOnly)date,
                         Login = login,
-                        Departureaddress = departureaddress,
-                        Destinationaddress = destinationaddress,
+                        Departureaddress = deparartureAddress,
+                        Destinationaddress = destinationAddress,
                         Sum = (decimal)sum
                     });
                     _context.SaveChanges();
                 }
-                catch (DbUpdateException ex)
+                catch (DbUpdateException updateException)
                 {
-                    if (ex.InnerException != null)
+                    if (updateException.InnerException != null)
                     {
-                        PostgresException e = (PostgresException)ex.InnerException;
-                        if (e.SqlState == "23503")
+                        PostgresException accident = (PostgresException)updateException.InnerException;
+                        if (accident.SqlState == "23503")
                             error = $"Нельзя добавить запись с номером машины, " +
                                 $"отсуствующем в таблице машины";
                     }
                     else
                     {
                         error = "Произошла непредвиденная ошибка";
-                        Console.WriteLine(ex);
+                        Console.WriteLine(updateException);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception updateException)
                 {
                     error = $"Произошла непредвиденная ошибка";
-                    Console.WriteLine(ex);
+                    Console.WriteLine(updateException);
                 }
             }
             return View("Index", new AccidentsViewModel
@@ -174,20 +175,20 @@ namespace WebAppTest.Controllers
         public IActionResult Filter(string? searchNumber, DateOnly? searchDate, string? searchLogin,
     string? searchDepartureAddress, string? searchDestinationAddress, decimal? searchSum)
         {
-            var items = _context.Accidents.AsQueryable(); // Фильтруем данные из таблицы Accidents
+            var items = _context.Accidents.AsQueryable();
 
             if (searchNumber != null)
-                items = items.Where(a => a.Number.Contains(searchNumber)); // Фильтрация по номеру
+                items = items.Where(a => a.Number.Contains(searchNumber));
             if (searchDate != null)
-                items = items.Where(a => a.Date == searchDate); // Фильтрация по дате
+                items = items.Where(a => a.Date == searchDate);
             if (searchLogin != null)
-                items = items.Where(a => a.Login.Contains(searchLogin)); // Фильтрация по логину
+                items = items.Where(a => a.Login.Contains(searchLogin));
             if (searchDepartureAddress != null)
-                items = items.Where(a => a.Departureaddress.Contains(searchDepartureAddress)); // Фильтрация по адресу отправления
+                items = items.Where(a => a.Departureaddress.Contains(searchDepartureAddress));
             if (searchDestinationAddress != null)
-                items = items.Where(a => a.Destinationaddress.Contains(searchDestinationAddress)); // Фильтрация по адресу назначения
+                items = items.Where(a => a.Destinationaddress.Contains(searchDestinationAddress));
             if (searchSum != null)
-                items = items.Where(a => a.Sum == searchSum); // Фильтрация по сумме
+                items = items.Where(a => a.Sum == searchSum);
 
             return View("Index", new AccidentsViewModel
             {

@@ -41,30 +41,30 @@ else
         <th>Страна</th>
     </thead>
     <tbody>
-    @foreach (Brand e in Model.Brands)
+    @foreach (Brand brand in Model.Brands)
     {
         <tr>
             <td>
                 <form method="post" asp-action="Edit">
-                    <input type="hidden" name="id" value=@e.Title />
-                    <input type="text" name="title" value=@e.Title />
+                    <input type="hidden" name="id" value=@brand.Title />
+                    <input type="text" name="title" value=@brand.Title />
                 </form>
             </td>
             <td>
                 <form method="post" asp-action="Edit">
-                    <input type="hidden" name="id" value=@e.Title />
-                    <input type="text" name="fullTitle" value="@e.FullTitle" />
+                    <input type="hidden" name="id" value=@brand.Title />
+                    <input type="text" name="fullTitle" value="@brand.FullTitle" />
                 </form>
             </td>
             <td>
                 <form method="post" asp-action="Edit">
-                    <input type="hidden" name="id" value=@e.Title />
-                    <input type="text" name="country" value=@e.Country />
+                    <input type="hidden" name="id" value=@brand.Title />
+                    <input type="text" name="country" value=@brand.Country />
                 </form>
             </td>
             <td>
                 <form method="post" asp-action="Delete">
-                    <input type="hidden" name="id" value=@e.Title />
+                    <input type="hidden" name="id" value=@brand.Title />
                     <input type="submit" value="Удалить" />
                 </form>
             </td>

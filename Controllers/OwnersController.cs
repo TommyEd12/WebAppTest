@@ -117,15 +117,15 @@ namespace WebAppTest.Controllers
             var items = _context.Owners.AsQueryable();
 
             if (searchNumber != null)
-                items = items.Where(i => i.Number.Contains(searchNumber)); // Частичное совпадение для номера
+                items = items.Where(i => i.Number.Contains(searchNumber));
             if (searchSecondName != null)
-                items = items.Where(i => i.SecondName.Contains(searchSecondName)); // Частичное совпадение для отчества
+                items = items.Where(i => i.SecondName.Contains(searchSecondName));
             if (searchName != null)
-                items = items.Where(i => i.Name.Contains(searchName)); // Частичное совпадение для имени
+                items = items.Where(i => i.Name.Contains(searchName));
             if (searchSurname != null)
-                items = items.Where(i => i.Surname.Contains(searchSurname)); // Частичное совпадение для фамилии
+                items = items.Where(i => i.Surname.Contains(searchSurname));
             if (searchLogin != null)
-                items = items.Where(i => i.Login.Contains(searchLogin)); // Частичное совпадение для логина
+                items = items.Where(i => i.Login.Contains(searchLogin));
 
             return View("Index", new OwnersViewModel()
             {
@@ -166,7 +166,7 @@ namespace WebAppTest.Controllers
         public IActionResult Add(string? number, string? secondName, string? name, string? surname, string? login)
         {
             string? error = null;
-            if (number == null || name == null || secondName == null) // Проверяем обязательные поля
+            if (number == null || name == null || secondName == null)
             {
                 error = "Не указан один из обязательных параметров (номер, имя или фамилия)";
             }
@@ -174,7 +174,6 @@ namespace WebAppTest.Controllers
             {
                 try
                 {
-                    // Генерация логина, если он не указан
                     if (string.IsNullOrEmpty(login))
                     {
                         // Преобразуем имя и фамилию в латиницу
@@ -211,7 +210,6 @@ namespace WebAppTest.Controllers
                         }
                     }
 
-                    // Создание нового владельца
                     var owner = new Owner
                     {
                         Number = number,
@@ -221,7 +219,6 @@ namespace WebAppTest.Controllers
                         Login = login
                     };
 
-                    // Добавление и сохранение в БД
                     _context.Owners.Add(owner);
                     _context.SaveChanges();
                 }

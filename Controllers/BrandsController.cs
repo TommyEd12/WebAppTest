@@ -26,29 +26,29 @@ namespace WebAppTest.Controllers
         [HttpPost]
         public IActionResult Edit(string? id, string? title, string? fullTitle, string? country)
         {
-            string? error = null;
+            string? error = null; //Не используется переменная
             if (id == null)
                 error = "Элемент не выбран";
             else
             {
-                Brand? e = _context.Brands.Where(e => e.Title == id).FirstOrDefault();
-                if (e == null)
+                Brand? brand = _context.Brands.Where(brand => brand.Title == id).FirstOrDefault();
+                if (brand == null)
                     error = $"Выбранного элемента не существует";
                 else
                 {
-                    if (title != null) { e.Title = title; }
-                    else if (fullTitle != null) { e.FullTitle = fullTitle; }
-                    else if (country != null) { e.Country = country; }
+                    if (title != null) { brand.Title = title; }
+                    else if (fullTitle != null) { brand.FullTitle = fullTitle; }
+                    else if (country != null) { brand.Country = country; }
 
                     try
                     {
-                        _context.Brands.Update(e);
+                        _context.Brands.Update(brand);
                         _context.SaveChanges();
                     }
-                    catch (Exception ex)
+                    catch (Exception editException)
                     {
                         error = $"Произошла непредвиденная ошибка";
-                        Console.WriteLine(ex.Message);
+                        Console.WriteLine(editException.Message);
                     }
                 }
             }
@@ -66,14 +66,14 @@ namespace WebAppTest.Controllers
                 error = "Элемент не выбран";
             else
             {
-                Brand? e = _context.Brands.Where(e => e.Title == id).FirstOrDefault();
-                if (e == null)
+                Brand? brand = _context.Brands.Where(brand => brand.Title == id).FirstOrDefault();
+                if (brand == null)
                     error = $"Выбранного элемента не существует";
                 else
                 {
                     try
                     {
-                        _context.Brands.Remove(e);
+                        _context.Brands.Remove(brand);
                         _context.SaveChanges();
                     }
                     catch (DbUpdateException ex)
@@ -115,9 +115,9 @@ namespace WebAppTest.Controllers
 
                 try
                 {
-                    var car = from Brand c in _context.Brands
-                              where c.Title == title
-                              select c;
+                    var car = from Brand currentCar in _context.Brands
+                              where currentCar.Title == title
+                              select currentCar;
                     if (car.Count() == 1)
                     {
                         throw new ArgumentException("Запись с данным номером уже существет");
@@ -134,8 +134,8 @@ namespace WebAppTest.Controllers
                 {
                     if (ex.InnerException != null)
                     {
-                        PostgresException e = (PostgresException)ex.InnerException;
-                        if (e.SqlState == "23503")
+                        PostgresException brand = (PostgresException)ex.InnerException;
+                        if (brand.SqlState == "23503")
                             error = $"Нельзя добавить запись с номером машины, " +
                                 $"отсуствующем в таблице машины";
                     }
@@ -167,18 +167,18 @@ namespace WebAppTest.Controllers
         [HttpGet]
         public IActionResult Filter(string? title, string? fullTitle, string? country)
         {
-            var items = _context.Brands.AsQueryable(); // Используем AsQueryable для дальнейшей фильтрации
+            var brands = _context.Brands.AsQueryable();
 
             if (title != null)
-                items = items.Where(brand => brand.Title.Contains(title)); // Частичное совпадение для названия
+                brands = brands.Where(brand => brand.Title.Contains(title));
             if (fullTitle != null)
-                items = items.Where(brand => brand.FullTitle.Contains(fullTitle)); // Частичное совпадение для полного названия
+                brands = brands.Where(brand => brand.FullTitle.Contains(fullTitle));
             if (country != null)
-                items = items.Where(brand => brand.Country.Contains(country)); // Частичное совпадение для страны
+                brands = brands.Where(brand => brand.Country.Contains(country));
 
             return View("Index", new BrandsViewModel
             {
-                Brands = items.ToList()
+                Brands = brands.ToList()
             });
         }
     }
