@@ -6,6 +6,9 @@ namespace WebAppTest.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Контроллер для роутинга приложения
+        /// </summary>
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)

@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 public partial class Owner
 {
+    /// <summary>
+    /// Классс для владельцев
+    /// </summary> <summary>
+    /// 
+    /// </summary>
+    /// <value></value>
     public int Id { get; set; }
 
     public string Number { get; set; } = null!;

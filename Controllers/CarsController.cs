@@ -7,15 +7,27 @@ using WebAppTest.ViewModels;
 
 namespace WebAppTest.Controllers
 {
+    /// <summary>
+    /// Контроллер для управления автомобилями.
+    /// Обеспечивает CRUD-операции и фильтрацию записей об автомобилях.
+    /// </summary>
     public class CarsController : Controller
     {
         private CarsContext _context;
 
+        /// <summary>
+        /// Инициализирует новый экземпляр контроллера автомобилей.
+        /// </summary>
+        /// <param name="context">Контекст базы данных для работы с автомобилями.</param>
         public CarsController(CarsContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Отображает список всех автомобилей.
+        /// </summary>
+        /// <returns>Представление со списком автомобилей и брендов.</returns>
         public IActionResult Index()
         {
             return View(new CarsViewModel()
@@ -25,6 +37,15 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Редактирует существующий автомобиль.
+        /// </summary>
+        /// <param name="id">Номер автомобиля для редактирования.</param>
+        /// <param name="newNumber">Новый номер автомобиля.</param>
+        /// <param name="brand">Новый бренд автомобиля.</param>
+        /// <param name="model">Новая модель автомобиля.</param>
+        /// <param name="color">Новый цвет автомобиля.</param>
+        /// <returns>Обновленное представление со списком автомобилей и сообщением об ошибке (если есть).</returns>
         [HttpPost]
         public IActionResult Edit(string? id, string? newNumber, string? brand, string? model, string? color)
         {
@@ -47,7 +68,6 @@ namespace WebAppTest.Controllers
                     {
                         _context.Cars.Update(car);
                         _context.SaveChanges();
-                        
                     }
                     catch (DbUpdateException ex)
                     {
@@ -70,7 +90,6 @@ namespace WebAppTest.Controllers
                         Console.WriteLine(ex);
                     }
                 }
-                
             }
 
             return View("Index", new CarsViewModel()
@@ -81,6 +100,11 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Удаляет автомобиль из системы.
+        /// </summary>
+        /// <param name="id">Номер автомобиля для удаления.</param>
+        /// <returns>Обновленное представление со списком автомобилей и сообщением об ошибке (если есть).</returns>
         [HttpPost]
         public IActionResult Delete(string? id)
         {
@@ -128,6 +152,14 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Фильтрует автомобили по указанным критериям.
+        /// </summary>
+        /// <param name="searchNumber">Номер автомобиля для фильтрации.</param>
+        /// <param name="searchBrand">Бренд для фильтрации.</param>
+        /// <param name="searchModel">Модель для фильтрации.</param>
+        /// <param name="searchColor">Цвет для фильтрации.</param>
+        /// <returns>Представление с отфильтрованным списком автомобилей.</returns>
         [HttpGet]
         public IActionResult Filter(string? searchNumber, string? searchBrand, string? searchModel, string? searchColor)
         {
@@ -149,6 +181,14 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Добавляет новый автомобиль в систему.
+        /// </summary>
+        /// <param name="number">Номер автомобиля.</param>
+        /// <param name="brand">Бренд автомобиля.</param>
+        /// <param name="model">Модель автомобиля.</param>
+        /// <param name="color">Цвет автомобиля.</param>
+        /// <returns>Обновленное представление со списком автомобилей и сообщением об ошибке (если есть).</returns>
         [HttpPost]
         public IActionResult Add(string? number, string? brand, string? model, string? color)
         {
@@ -177,7 +217,6 @@ namespace WebAppTest.Controllers
                         Brand = brand,
                         Model = model,
                         Color = color
-
                     });
                     _context.SaveChanges();
                 }
@@ -213,7 +252,5 @@ namespace WebAppTest.Controllers
                 Error = error
             });
         }
-
-
     }
 }

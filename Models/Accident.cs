@@ -1,5 +1,11 @@
 ﻿public partial class Accident
-{
+{   
+    /// <summary>
+    /// Класс для автомобильных аварий
+    /// </summary> <summary>
+    /// 
+    /// </summary>
+    /// <value></value>
     public int Id { get; set; }
 
     public string Number { get; set; } = null!;

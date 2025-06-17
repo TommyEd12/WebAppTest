@@ -130,3 +130,4 @@ C:\Users\egorb\Downloads\Telegram Desktop\WebApp-master\WebApp-master\WebAppTest
 C:\Users\egorb\Downloads\Telegram Desktop\WebApp-master\WebApp-master\WebAppTest\obj\Debug\net8.0\WebAppTest.pdb
 C:\Users\egorb\Downloads\Telegram Desktop\WebApp-master\WebApp-master\WebAppTest\obj\Debug\net8.0\WebAppTest.genruntimeconfig.cache
 C:\Users\egorb\Downloads\Telegram Desktop\WebApp-master\WebApp-master\WebAppTest\obj\Debug\net8.0\ref\WebAppTest.dll
+C:\Users\egorb\Downloads\Telegram Desktop\WebApp-master\WebApp-master\WebAppTest\obj\Debug\net8.0\WebAppTest.sourcelink.json

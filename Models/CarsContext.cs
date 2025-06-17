@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 public partial class CarsContext : DbContext
 {
+    /// <summary>
+    /// Класс для контекста автомобилей
+    /// </summary>
     public CarsContext()
     {
     }

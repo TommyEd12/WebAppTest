@@ -5,18 +5,31 @@ using WebAppTest.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
-//Http методы должны быть асинхронными
+/// <summary>
+/// Контроллер для управления записями об авариях.
+/// </summary>
 namespace WebAppTest.Controllers
 {
+    /// <summary>
+    /// Контроллер для обработки операций с авариями, включая CRUD и фильтрацию.
+    /// </summary>
     public class AccidentsController : Controller
     {
         private CarsContext _context;
 
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="AccidentsController"/>.
+        /// </summary>
+        /// <param name="context">Контекст базы данных для информации об автомобилях и авариях.</param>
         public AccidentsController(CarsContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Отображает главное представление со списком всех аварий.
+        /// </summary>
+        /// <returns>Представление со всеми записями об авариях.</returns>
         public IActionResult Index()
         {
             return View(new AccidentsViewModel
@@ -25,10 +38,21 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Редактирует существующую запись об аварии.
+        /// </summary>
+        /// <param name="id">ID аварии для редактирования.</param>
+        /// <param name="number">Номер автомобиля, связанного с аварией.</param>
+        /// <param name="date">Дата аварии.</param>
+        /// <param name="login">Логин, связанный с записью об аварии.</param>
+        /// <param name="deparartureAddress">Адрес отправления.</param>
+        /// <param name="destinationAddress">Адрес назначения.</param>
+        /// <param name="sum">Сумма, связанная с аварией.</param>
+        /// <returns>Обновленное представление с записями об авариях или сообщением об ошибке.</returns>
         [HttpPost]
         public IActionResult Edit(int? id,
-    string? number, DateOnly? date, string? login,
-    string? deparartureAddress, string? destinationAddress, decimal? sum)
+            string? number, DateOnly? date, string? login,
+            string? deparartureAddress, string? destinationAddress, decimal? sum)
         {
             string? error = null;
             if (id == null)
@@ -88,6 +112,11 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Удаляет запись об аварии.
+        /// </summary>
+        /// <param name="id">ID аварии для удаления.</param>
+        /// <returns>Обновленное представление с оставшимися записями или сообщением об ошибке.</returns>
         [HttpPost]
         public IActionResult Delete(int? id)
         {
@@ -120,6 +149,16 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Добавляет новую запись об аварии.
+        /// </summary>
+        /// <param name="number">Номер автомобиля, связанного с аварией.</param>
+        /// <param name="date">Дата аварии.</param>
+        /// <param name="login">Логин, связанный с записью об аварии.</param>
+        /// <param name="deparartureAddress">Адрес отправления.</param>
+        /// <param name="destinationAddress">Адрес назначения.</param>
+        /// <param name="sum">Сумма, связанная с аварией.</param>
+        /// <returns>Обновленное представление со всеми записями об авариях, включая новую, или сообщение об ошибке.</returns>
         [HttpPost]
         public IActionResult Add(string? number, DateOnly? date, string? login,
             string? deparartureAddress, string? destinationAddress, decimal? sum)
@@ -171,9 +210,19 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Фильтрует записи об авариях по указанным критериям.
+        /// </summary>
+        /// <param name="searchNumber">Номер автомобиля для фильтрации.</param>
+        /// <param name="searchDate">Дата аварии для фильтрации.</param>
+        /// <param name="searchLogin">Логин для фильтрации.</param>
+        /// <param name="searchDepartureAddress">Адрес отправления для фильтрации.</param>
+        /// <param name="searchDestinationAddress">Адрес назначения для фильтрации.</param>
+        /// <param name="searchSum">Сумма для фильтрации.</param>
+        /// <returns>Представление с отфильтрованными записями об авариях.</returns>
         [HttpGet]
         public IActionResult Filter(string? searchNumber, DateOnly? searchDate, string? searchLogin,
-    string? searchDepartureAddress, string? searchDestinationAddress, decimal? searchSum)
+            string? searchDepartureAddress, string? searchDestinationAddress, decimal? searchSum)
         {
             var items = _context.Accidents.AsQueryable();
 

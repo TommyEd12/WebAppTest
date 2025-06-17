@@ -7,6 +7,9 @@ namespace WebAppTest.Controllers
 {
     public class OwnersController : Controller
     {
+        /// <summary>
+        /// Контроллер для работы с владельцами
+        /// </summary>
         private readonly CarsContext _context;
 
         public OwnersController(CarsContext context)

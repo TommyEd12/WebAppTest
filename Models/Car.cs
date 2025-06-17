@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 public partial class Car
 {
+    /// <summary>
+    /// Класс для машин
+    /// </summary> <summary>
+    /// 
+    /// </summary>
+    /// <value></value>
     public string Number { get; set; } = null!;
 
     public string Brand { get; set; } = null!;

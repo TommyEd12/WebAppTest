@@ -6,15 +6,26 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebAppTest.Controllers
 {
+    /// <summary>
+    /// Контроллер для управления брендами автомобилей.
+    /// </summary>
     public class BrandsController : Controller
     {
         private CarsContext _context;
 
+        /// <summary>
+        /// Инициализирует новый экземпляр контроллера брендов.
+        /// </summary>
+        /// <param name="context">Контекст базы данных для работы с брендами.</param>
         public BrandsController(CarsContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Отображает список всех брендов.
+        /// </summary>
+        /// <returns>Представление со списком брендов.</returns>
         public IActionResult Index()
         {
             return View(new BrandsViewModel
@@ -23,10 +34,18 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Редактирует существующий бренд.
+        /// </summary>
+        /// <param name="id">Идентификатор бренда (название).</param>
+        /// <param name="title">Краткое название бренда.</param>
+        /// <param name="fullTitle">Полное название бренда.</param>
+        /// <param name="country">Страна производителя.</param>
+        /// <returns>Обновленное представление со списком брендов.</returns>
         [HttpPost]
         public IActionResult Edit(string? id, string? title, string? fullTitle, string? country)
         {
-            string? error = null; //Не используется переменная
+            string? error = null;
             if (id == null)
                 error = "Элемент не выбран";
             else
@@ -58,6 +77,11 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Удаляет бренд из системы.
+        /// </summary>
+        /// <param name="id">Идентификатор бренда (название) для удаления.</param>
+        /// <returns>Обновленное представление со списком брендов и сообщением об ошибке (если есть).</returns>
         [HttpPost]
         public IActionResult Delete(string? id)
         {
@@ -104,6 +128,13 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Добавляет новый бренд в систему.
+        /// </summary>
+        /// <param name="title">Краткое название бренда.</param>
+        /// <param name="fullTitle">Полное название бренда.</param>
+        /// <param name="country">Страна производителя.</param>
+        /// <returns>Обновленное представление со списком брендов и сообщением об ошибке (если есть).</returns>
         [HttpPost]
         public IActionResult Add(string? title, string? fullTitle, string? country)
         {
@@ -112,7 +143,6 @@ namespace WebAppTest.Controllers
                 error = "Не уаказан один из параметров";
             else
             {
-
                 try
                 {
                     var car = from Brand currentCar in _context.Brands
@@ -156,7 +186,6 @@ namespace WebAppTest.Controllers
                 }
             }
 
-
             return View("Index", new BrandsViewModel
             {
                 Brands = _context.Brands.ToList(),
@@ -164,6 +193,13 @@ namespace WebAppTest.Controllers
             });
         }
 
+        /// <summary>
+        /// Фильтрует бренды по указанным критериям.
+        /// </summary>
+        /// <param name="title">Краткое название для фильтрации.</param>
+        /// <param name="fullTitle">Полное название для фильтрации.</param>
+        /// <param name="country">Страна производителя для фильтрации.</param>
+        /// <returns>Представление с отфильтрованным списком брендов.</returns>
         [HttpGet]
         public IActionResult Filter(string? title, string? fullTitle, string? country)
         {
