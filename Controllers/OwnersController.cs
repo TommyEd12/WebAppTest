@@ -122,7 +122,7 @@ namespace WebAppTest.Controllers
                 items = items.Where(i => i.SecondName.Contains(searchSecondName));
             if (searchName != null)
                 items = items.Where(i => i.Name.Contains(searchName));
-            if (searchSurname != null)
+            if (searchSurname != null) //Поле Surname может быть нулевым
                 items = items.Where(i => i.Surname.Contains(searchSurname));
             if (searchLogin != null)
                 items = items.Where(i => i.Login.Contains(searchLogin));
