@@ -1,0 +1,61 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.error {
+    background-color: #FFA07A;
+    text-align: center;
+}
+
+.sub {
+    background-color: #90EE90; /* ћенее €ркий зелЄный */
+}
+
+input::placeholder {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.database {
+    /* ќбщие стили дл€ таблицы */
+}
+
+    .database th {
+        border: 1px solid rgb(0, 0, 0);
+    }
+
+    .database td {
+        border: 1px solid rgb(0, 0, 0);
+    }
+
+        .database td:hover {
+            background-color: #FFA07A;
+        }
+
+        .database td > input {
+            outline: none;
+            border: none;
+        }
+
+        .database td > form > input {
+            outline: none

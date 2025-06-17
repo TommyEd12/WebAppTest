@@ -1,0 +1,188 @@
+﻿@using WebAppTest.Models
+@model WebAppTest.ViewModels.AccidentsViewModel
+
+@functions {
+    public string GetDate(DateOnly date)
+    {
+        string year = date.Year.ToString();
+        string month = date.Month.ToString();
+        string day = date.Day.ToString();
+
+        while (year.Length < 4) { year = "0" + year; }
+        if (month.Length < 2) { month = "0" + month; }
+        if (day.Length < 2) { day = "0" + day; }
+
+        return $"{year}-{month}-{day}";
+    }
+
+    public string GetDateNow()
+    {
+        DateTime now = DateTime.Now;
+
+        string year = now.Year.ToString();
+        string month = now.Month.ToString();
+        string day = now.Day.ToString();
+
+        while (year.Length < 4) { year = "0" + year; }
+        if (month.Length < 2) { month = "0" + month; }
+        if (day.Length < 2) { day = "0" + day; }
+
+        return $"{year}-{month}-{day}";
+    }
+}
+
+@{
+    ViewData["Title"] = "Заказы";
+}
+@if (Model.Error != null)
+{
+    <div class="error">@Model.Error</div>
+}
+<h2>Заказы</h2>
+<h6>Фильтр</h6>
+<table class="database">
+    <thead>
+    <th>Номер</th>
+    <th>Дата</th>
+    <th>Логин</th>
+    <th>Адрес отправления</th>
+    <th>Адрес прибытия</th>
+    </thead>
+    <tbody>
+        <form method="get" asp-action="Filter">
+        <tr>
+            <td>
+                <input type="text" name="searchNumber"
+                       pattern="^[А-ЯA-Z]{1}[0-9]{3}[А-ЯA-Z]{2}[0-9]{2,3}$"
+                       title="A111AA111" />
+            </td>
+            <td>
+                <input type="date" name="searchDate" max="@GetDateNow()" />
+            </td>
+            <td>
+                <input type="text" name="searchLogin" />
+            </td>
+            <td>
+                <input type="text" name="searchDepartureAddress" />
+            </td>
+            <td>
+                <input type="text" name="searchDestinationAddress" />
+            </td>
+            <td>
+                <input type="submit" value="Применить" />
+            </td>
+        </tr>
+        </form>
+    </tbody>
+</table>
+<p></p>
+<h6>Найденная информация</h6>
+@if (Model.Accidents.Count() == 0)
+{
+    <p>Не найдено ни одной записи, удовлетворяющей условию</p>
+}
+else
+{
+    <table class="database">
+        <thead>
+        <th>Номер</th>
+        <th>Дата</th>
+        <th>Логин</th>
+        <th>Адрес отправления</th>
+        <th>Адрес прибытия</th>
+        </thead>
+        <tbody>
+            @foreach (Accident e in Model.Accidents)
+            {
+                <tr>
+                    <td>
+                        <form method="post" asp-action="Edit">
+                            <input type="hidden" name="id" value=@e.Id />
+                            <input type="text" name="number" value=@e.Number
+                                   pattern="^[А-ЯA-Z]{1}[0-9]{3}[А-ЯA-Z]{2}[0-9]{2,3}$"
+                                   title="A111AA111" />
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="Edit" id="form-@e.Id">
+                            <input type="hidden" name="id" value=@e.Id />
+                            <input type="date" name="date" value=@GetDate(e.Date) max="@GetDateNow()" id="date-@e.Id" />
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="Edit">
+                            <input type="hidden" name="id" value=@e.Id />
+                            <input type="text" name="login" value=@e.Login />
+                        </form>
+                    </td>
+                    <td class="address-column">
+                        <form method="post" asp-action="Edit">
+                            <input type="hidden" name="id" value=@e.Id />
+                            <input type="text" name="departureaddress" value="@e.Departureaddress" />
+                        </form>
+                    </td>
+                    <td class="address-column">
+                        <form method="post" asp-action="Edit">
+                            <input type="hidden" name="id" value=@e.Id />
+                            <input type="text" name="destinationaddress" value="@e.Destinationaddress" />
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="Delete">
+                            <input type="hidden" name="id" value=@e.Id />
+                            <input type="submit" value="Удалить" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<p></p>
+<h6>Добавление элемента</h6>
+<div>
+    <table class="database">
+        <form method="post" asp-action="Add">
+        <tr>
+            <td>
+                <input type="text" name="number" required
+                       pattern="^[А-ЯA-Z]{1}[0-9]{3}[А-ЯA-Z]{2}[0-9]{2,3}$"
+                       title="A111AA111" />
+            </td>
+            <td>
+                <input type="date" name="date" max="@GetDateNow()" required />
+            </td>
+            <td>
+                <input type="text" name="login" required />
+            </td>
+            <td style="width: 300px;">
+                <input type="text" name="departureaddress" required />
+            </td>
+            <td style="width: 300px;">
+                <input type="text" name="destinationaddress" required />
+            </td>
+            <td>
+                <input type="submit" value="Добавить" required />
+            </td>
+        </tr>
+        </form>
+    </table>
+</div>
+
+<!-- Скрипт для автоматической отправки формы при изменении даты -->
+<script>
+    // Функция для автоматической отправки формы при изменении даты
+    function autoSubmitForm(dateInput) {
+        const form = dateInput.closest('form'); // Находим ближайшую форму
+        if (form) {
+            form.submit(); // Отправляем форму
+        }
+    }
+
+    // Находим все поля ввода даты и добавляем обработчик события
+    document.querySelectorAll('input[type="date"]').forEach(dateInput => {
+        dateInput.addEventListener('change', function() {
+            autoSubmitForm(this); // Вызываем функцию при изменении даты
+        });
+    });
+</script>

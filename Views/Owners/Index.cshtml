@@ -1,0 +1,129 @@
+﻿@using WebAppTest.Models
+@model WebAppTest.ViewModels.OwnersViewModel
+@{
+    ViewData["Title"] = "Работники";
+}
+@if (Model.Error != null)
+{
+    <div class="error">@Model.Error</div>   
+}
+<h2>Работники</h2>
+<h6>Фильтр</h6>
+<table class="database">
+    <thead>
+        <th>Номер</th>
+        <th>Фамилия</th>
+        <th>Имя</th>
+        <th>Отчество</th>
+        <th>Логин</th>
+    </thead>
+    <tbody>
+        <form method="get" asp-action="Filter">
+        <tr>
+            <td>
+                <input type="text" name="searchNumber"
+                       pattern="^[А-ЯA-Z]{1}[0-9]{3}[А-ЯA-Z]{2}[0-9]{2,3}$"
+                       title="A111AA111" />
+            </td>
+            <td><input type="text" name="searchSecondName" /></td>
+            <td><input type="text" name="searchName" /></td>
+            <td><input type="text" name="searchSurname" /></td>
+            <td><input type="text" name="searchLogin" /></td> 
+            <td><input type="submit" value="Применить" /></td>
+        </tr>
+        </form>
+    </tbody>
+</table>
+<p></p>
+<h6>Найденная информация</h6>
+@if (Model.Owners.Count() == 0)
+{
+<p>Не найденно ни одной записи, удовалетворяющей условию</p>
+}
+else
+{
+    <table class="database">
+        <thead>
+        <th>Номер</th>
+        <th>Фамилия</th>
+        <th>Имя</th>
+        <th>Отчество</th>
+        <th>Логин</th> 
+        </thead>
+        <tbody>
+            @foreach (Owner owner in Model.Owners)
+            {
+                <tr>
+                    <td>
+                        <form method="get" asp-action="Edit">
+                            <input type="hidden" name="id" value=@owner.Id />
+                            <input type="text" name="newNumber" value=@owner.Number
+                                   pattern="^[А-ЯA-Z]{1}[0-9]{3}[А-ЯA-Z]{2}[0-9]{2,3}$"
+                                   title="A111AA111" />
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="Edit">
+                            <input type="hidden" name="id" value=@owner.Id />
+                            <input type="text" name="secondName" value=@owner.SecondName />
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="Edit">
+                            <input type="hidden" name="id" value=@owner.Id />
+                            <input type="text" name="name" value=@owner.Name />
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="Edit">
+                            <input type="hidden" name="id" value=@owner.Id />
+                            <input type="text" name="surname" value=@owner.Surname />
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="Edit">
+                            <input type="hidden" name="id" value=@owner.Id />
+                            <input type="text" name="login" value=@owner.Login /> 
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="Delete">
+                            <input type="hidden" name="id" value=@owner.Id />
+                            <input type="submit" value="Удалить" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<p></p>
+<h6>Добавление элемента</h6>
+<div>
+    <table class="database">
+        <form method="post" asp-action="Add">
+        <tr>
+            <td>
+                <input type="text" name="number" required
+                       pattern="^[А-ЯA-Z]{1}[0-9]{3}[А-ЯA-Z]{2}[0-9]{2,3}$"
+                       title="A111AA111" />
+            </td>
+            <td>
+                <input type="text" name="secondName" />
+            </td>
+            <td>
+                <input type="text" name="name" required />
+            </td>
+            <td>
+                <input type="text" name="surname" />
+            </td>
+            <td>
+                <input type="text" name="login" /> <
+            </td>
+            <td>
+                <input type="submit" value="Добавить" required />
+            </td>
+        </tr>
+        </form>
+    </table>
+</div>

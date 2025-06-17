@@ -1,0 +1,97 @@
+﻿@using WebAppTest.Models
+@model WebAppTest.ViewModels.BrandsViewModel
+@{
+    ViewData["Title"] = "Бренды";
+}
+@if (Model.Error != null)
+{
+     <div class="error">@Model.Error</div>   
+}
+<h2>Бренды</h2>
+<h6>Фильтр</h6>
+<table class="database">
+    <thead>
+        <th>Название</th>
+        <th>Полное навазние</th>
+        <th>Страна</th>
+    </thead>
+    <tbody>
+        <form method="get" asp-action="Filter">
+            <tr>
+                <td><input type="text" name="title"/></td>
+                <td><input type="text" name="fullTitle"/></td>
+                <td><input type="text" name="country"/></td>
+                <td><input type="submit" value="Применить"/></td>
+            </tr>
+        </form>
+    </tbody>
+</table>
+<p></p>
+<h6>Найденная информация</h6>
+@if (Model.Brands.Count() == 0)
+{
+<p>Не найденно ни одной записи, удовалетворяющей условию</p>
+}
+else
+{
+<table class="database">
+    <thead>
+        <th>название</th>
+        <th>Полное навазние</th>
+        <th>Страна</th>
+    </thead>
+    <tbody>
+    @foreach (Brand e in Model.Brands)
+    {
+        <tr>
+            <td>
+                <form method="post" asp-action="Edit">
+                    <input type="hidden" name="id" value=@e.Title />
+                    <input type="text" name="title" value=@e.Title />
+                </form>
+            </td>
+            <td>
+                <form method="post" asp-action="Edit">
+                    <input type="hidden" name="id" value=@e.Title />
+                    <input type="text" name="fullTitle" value="@e.FullTitle" />
+                </form>
+            </td>
+            <td>
+                <form method="post" asp-action="Edit">
+                    <input type="hidden" name="id" value=@e.Title />
+                    <input type="text" name="country" value=@e.Country />
+                </form>
+            </td>
+            <td>
+                <form method="post" asp-action="Delete">
+                    <input type="hidden" name="id" value=@e.Title />
+                    <input type="submit" value="Удалить" />
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+}
+<p></p>
+<h6>Добавление элемента</h6>
+<div>
+    <table class="database">
+        <form method="post" asp-action="Add">
+            <tr>
+                <td>
+                    <input type="text" name="title" required/>
+                </td>
+                <td>
+                    <input type="text" name="fullTitle" required/>
+                </td>
+                <td>
+                    <input type="text" name="country" required/>
+                </td>
+                <td>
+                    <input type="submit" value="Добавить" required/>
+                </td>
+            </tr>
+        </form>
+    </table>
+</div>
